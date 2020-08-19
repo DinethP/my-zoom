@@ -2,6 +2,7 @@
 const express = require('express');
 const app = express();
 const server = require('http').Server(app);
+const io = require('socketio')(server);
 // import uuid version 4
 const { v4: uuidv4} = require('uuid');
 const { resolveSoa } = require('dns');
@@ -23,6 +24,8 @@ app.get('/:room', (req, res) => {
     // roomId param gets passed to the room.ejs file
   res.render('room', {roomId: req.params.room})
 })
+
+// make a socket io connection
 
 
 
