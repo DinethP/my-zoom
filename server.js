@@ -3,9 +3,12 @@ const express = require('express');
 const app = express();
 const server = require('http').Server(app);
 // import uuid version 4
-const { v4: uuidv4} = require('uuid')
+const { v4: uuidv4} = require('uuid');
+const { resolveSoa } = require('dns');
 // setup ejs (embedded javascript)
 app.set('view engine', 'ejs');
+// set the public folder (Very important)
+app.use(express.static('public'));
 
 
 app.get('/', (req, res) => {
