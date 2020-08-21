@@ -22,10 +22,27 @@ const videoGrid = document.getElementById('video-grid');
 let myVideoStream;
 navigator.mediaDevices.getUserMedia({
   video: true,
-  audio: true
+  audio: false
 }).then((stream) => {
   myVideoStream = stream;
   addVideoStream(myVideo, stream);
+
+  // answer the call recieved from other users
+  peer.on('call', (call) => {
+    call.answer(stream);
+    const video = document.createElement('video');
+    // send our video stream to them
+    call.on('stream', (userVideoStream) => {
+      addVideoStream(video, userVideoStream);
+    });
+  })
+  
+
+  // This will be listened to by server.js
+  // add the stream of other users
+  socket.on('user-connected', (userId) => {
+    connectToNewUser(userId, stream);
+  });
 })
 
 const addVideoStream = (video, stream) => {
@@ -41,18 +58,17 @@ const addVideoStream = (video, stream) => {
 peer.on('open', (id) => {
   // Send event to our server
   // ROOM_ID is passed in from room.ejs
+  // id is the userId
   socket.emit('join-room', ROOM_ID, id);
-})
+});
 
 
-
-
-// This will be listened to by server.js
-socket.on('user-connected', () => {
-  connectToNewUser();
-})
-
-const connectToNewUser = () => {
-  console.log('new user');
+const connectToNewUser = (userId, stream) => {
+  const call = peer.call(userId, stream);
+  const video = document.createElement('video');
+  // get the user's stream and show it to us
+  call.on('stream', (userVideoStream) => {
+    addVideoStream(video, userVideoStream);
+  });
 }
 

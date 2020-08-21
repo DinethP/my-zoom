@@ -18,6 +18,7 @@ app.set('view engine', 'ejs');
 // set the public folder (Very important)
 app.use(express.static('public'));
 
+// path for peer to load on our server
 app.use('/peerjs', peerServer);
 app.get('/', (req, res) => {
   // res.status(200).send("Hello World");
@@ -39,14 +40,14 @@ io.on('connection', (socket) => {
   // events to listen to from frontend
 
   // listen to 'join-room' emitted from script.js
-  socket.on('join-room', (roomId) => {
+  socket.on('join-room', (roomId, userId) => {
     // make the socket(user) join a room
     socket.join(roomId);
     // send a message to the room you're currently
     // this message is sent to everyone else in the room except the user
     // who is newly connected
     // 'user-connected' is the event
-    socket.to(roomId).broadcast.emit('user-connected');
+    socket.to(roomId).broadcast.emit('user-connected', userId);
   })
 })
 
