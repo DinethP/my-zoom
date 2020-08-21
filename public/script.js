@@ -29,9 +29,11 @@ navigator.mediaDevices.getUserMedia({
 
   // answer the call recieved from other users
   peer.on('call', (call) => {
-    call.answer(stream);
-    const video = document.createElement('video');
     // send our video stream to them
+    call.answer(stream);
+    // make a video element to show user's video on our page
+    const video = document.createElement('video');
+    // when we get their stream, we add it to our page inside the new video element
     call.on('stream', (userVideoStream) => {
       addVideoStream(video, userVideoStream);
     });
@@ -39,7 +41,7 @@ navigator.mediaDevices.getUserMedia({
   
 
   // This will be listened to by server.js
-  // add the stream of other users
+  // send out video stream to new user
   socket.on('user-connected', (userId) => {
     connectToNewUser(userId, stream);
   });
@@ -55,6 +57,7 @@ const addVideoStream = (video, stream) => {
 }
 
 // this id is unique for everyone who is connecting
+// this function runs when the peer server is open and receives userId's
 peer.on('open', (id) => {
   // Send event to our server
   // ROOM_ID is passed in from room.ejs
@@ -64,11 +67,18 @@ peer.on('open', (id) => {
 
 
 const connectToNewUser = (userId, stream) => {
+  // call the user with userId and send out stream
   const call = peer.call(userId, stream);
   const video = document.createElement('video');
-  // get the user's stream and show it to us
+  // after calling, the user will send their stream to us
+
   call.on('stream', (userVideoStream) => {
+    // Add the user's video to our page to view
     addVideoStream(video, userVideoStream);
   });
+  // Remove the user's video from out page if they leave the call
+  call.on('close', () => {
+    video.remove();
+  })
 }
 
