@@ -1,5 +1,10 @@
 // Javascript for frontEnd
 
+const { connect } = require("http2");
+
+// Importing socket
+const socket = io('/');
+
 // Create video HTML Tag
 const myVideo = document.createElement('video');
 myVideo.muted = true;
@@ -17,6 +22,18 @@ navigator.mediaDevices.getUserMedia({
   addVideoStream(myVideo, stream);
 })
 
+// Send event to our server
+// ROOM_ID is passed in from room.ejs
+socket.emit('join-room', ROOM_ID);
+
+// This will be listened to by server.js
+socket.on('user-connected', () => {
+  connectToNewUser();
+})
+
+const connectToNewUser = () => {
+  console.log('new user');
+}
 
 const addVideoStream = (video, stream) => {
   video.srcObject = stream;

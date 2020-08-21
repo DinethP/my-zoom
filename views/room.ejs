@@ -1,12 +1,16 @@
+<!-- EJS view engine -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="style.css">
+  <!-- to access socket.io from front end which is served from our server -->
+  <script src="/socket.io/socket.io.js"></script>
   <title>MyZoom</title>
   <script>
-    console.log("<%= roomId %>");
+    // This ROOM_ID can now be accessed in script.js
+    const ROOM_ID = "<%= roomId %>"
   </script>
 </head>
 <body>
