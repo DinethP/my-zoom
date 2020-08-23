@@ -8,3 +8,28 @@ video {
   width: 400px;
   object-fit: cover;
 }
+
+.main {
+  /* not quite sure */
+  height: 100vh;
+  display: flex;
+}
+
+.main__left {
+  display: flex;
+  flex-direction: column;
+  flex: 0.8;
+}
+
+.main__videos {
+  /* make the images grow as much as possible */
+  flex-grow: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: black;
+}
+
+.main__right {
+  flex: 0.2;
+}
