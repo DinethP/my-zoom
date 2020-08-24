@@ -1,3 +1,9 @@
+body {
+  /* remove default margi and padding */
+  margin: 0;
+  padding: 0;
+}
+
 #video-grid {
   display: flex;
   justify-content: center;
@@ -21,6 +27,41 @@ video {
   flex: 0.8;
 }
 
+.main__controls {
+  display: flex;
+  /* separates the blocks into 3 sections */
+  justify-content: space-between;
+  background-color: #1C1E20;
+  /* colour of icons and text */
+  color: #D2D2D2;
+  padding: 5px;
+}
+
+.main__controls__block {
+  display: flex;
+  flex-direction: row;
+}
+
+.main__controls__button {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 8px 10px;
+  min-width: 80px;
+  cursor: pointer;
+}
+
+.main__controls__button i {
+  /* adjust button icon size */
+  font-size: 24px;
+}
+
+.main__controls__button:hover {
+  background-color: #343434;
+  border-radius: 5px;
+}
+
 .main__videos {
   /* make the images grow as much as possible */
   flex-grow: 1;
@@ -30,6 +71,11 @@ video {
   background-color: black;
 }
 
+.leave_meeting {
+  color: #EB534B;
+}
+
 .main__right {
   flex: 0.2;
 }
+
