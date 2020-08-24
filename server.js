@@ -52,10 +52,15 @@ io.on('connection', (socket) => {
     socket.on('message', (message) => {
       // send message to frontend, for specific room
       io.to(roomId).emit('createMessage', message);
-    })
+    });
+    // listen for user disconnecting
+    socket.on('disconnect', () => {
+      // send an event to room
+      socket.to(roomId).broadcast.emit('user-disconnected', userId);
+    });
   })
 })
 
 
 
-server.listen(3000);
+server.listen(process.env.PORT||3000);

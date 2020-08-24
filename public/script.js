@@ -7,6 +7,7 @@ const socket = io('/');
 const myVideo = document.createElement('video');
 // prevent hearing your own audio
 myVideo.muted = true;
+const users = {}
 
 // create peer
 var peer = new Peer(undefined, {
@@ -75,6 +76,15 @@ const addVideoStream = (video, stream) => {
   videoGrid.append(video);
 }
 
+  // listen to user-disconnect from server
+  // and remove user from call
+  socket.on('user-disconnected', (userId) => {
+    if(users[userId]){
+      console.log(userId)
+      users[userId].close();
+    } 
+  })
+
 // this id is unique for everyone who is connecting
 // this function runs when the peer server is open and receives userId's
 peer.on('open', (id) => {
@@ -96,9 +106,13 @@ const connectToNewUser = (userId, stream) => {
     addVideoStream(video, userVideoStream);
   });
   // Remove the user's video from out page if they leave the call
+  // However this doesn't work well. We use socket event instead
   call.on('close', () => {
     video.remove();
   })
+
+  // every userId is linked to a call made
+  // users[userId] = call
 }
 
 // This function scrolls the chat window to the bottom when overflowing
