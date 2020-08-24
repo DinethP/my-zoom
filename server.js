@@ -50,8 +50,8 @@ io.on('connection', (socket) => {
     socket.to(roomId).broadcast.emit('user-connected', userId);
     // listen to 'message' event
     socket.on('message', (message) => {
-      // send message to frontend
-      io.to(roomId).
+      // send message to frontend, for specific room
+      io.to(roomId).emit('createMessage', message);
     })
   })
 })

@@ -39,11 +39,29 @@ navigator.mediaDevices.getUserMedia({
     });
   })
   
-
   // This will be listened to by server.js
   // send out video stream to new user
   socket.on('user-connected', (userId) => {
     connectToNewUser(userId, stream);
+  });
+
+  // Handling chat messages
+  // fetch the message entered by user
+  let text = $('input');
+
+  $('html').keydown((e) => {
+    if(e.which == 13 && text.val().length !== 0){
+      // sending event(emit) 'message' from front-end to server
+      socket.emit('message', text.val());
+      // clear message fron field
+      text.val('');
+    }
+  });
+
+  // get the chat message from the server
+  socket.on('createMessage', (message) => {
+    $('.messages').append(`<li class="message"><b>user</b><br/>${message}</li>`)
+    scrollToBottom();
   });
 })
 
@@ -82,16 +100,14 @@ const connectToNewUser = (userId, stream) => {
   })
 }
 
-// fetch the message entered
-let text = $('input');
+// This function scrolls the chat window to the bottom when overflowing
+// This works together with css `overflow-y: scroll;`
+const scrollToBottom = () => {
+  let d = $('.main__chat__window');
+  d.scrollTop(d.prop("scrollHeight"));
+}
 
-$('html').keydown((e) => {
-  if(e.which == 13 && text.val().length !== 0){
-    console.log(text.val());
-    // sending event(emit) 'message' from front-end
-    socket.emit('message', text.val());
-    // clear message fron field
-    text.val('');
-  }
-});
+const muteUnmute = ()
+
+
 
