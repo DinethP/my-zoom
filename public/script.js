@@ -82,3 +82,16 @@ const connectToNewUser = (userId, stream) => {
   })
 }
 
+// fetch the message entered
+let text = $('input');
+
+$('html').keydown((e) => {
+  if(e.which == 13 && text.val().length !== 0){
+    console.log(text.val());
+    // sending event(emit) 'message' from front-end
+    socket.emit('message', text.val());
+    // clear message fron field
+    text.val('');
+  }
+});
+
