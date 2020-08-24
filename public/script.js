@@ -67,23 +67,14 @@ navigator.mediaDevices.getUserMedia({
   });
 })
 
-const addVideoStream = (video, stream) => {
-  video.srcObject = stream;
-  video.addEventListener('loadedmetadata', () => {
-    video.play();
-  });
-  // Append the video to the video-grid div in room.ejs
-  videoGrid.append(video);
-}
-
-  // listen to user-disconnect from server
-  // and remove user from call
-  socket.on('user-disconnected', (userId) => {
-    if(users[userId]){
-      console.log(userId)
-      users[userId].close();
-    } 
-  })
+// listen to user-disconnect from server
+// and remove user from call
+socket.on('user-disconnected', (userId) => {
+  if(users[userId]){
+    console.log(userId)
+    users[userId].close();
+  } 
+})
 
 // this id is unique for everyone who is connecting
 // this function runs when the peer server is open and receives userId's
@@ -112,7 +103,16 @@ const connectToNewUser = (userId, stream) => {
   })
 
   // every userId is linked to a call made
-  // users[userId] = call
+  users[userId] = call
+}
+
+const addVideoStream = (video, stream) => {
+  video.srcObject = stream;
+  video.addEventListener('loadedmetadata', () => {
+    video.play();
+  });
+  // Append the video to the video-grid div in room.ejs
+  videoGrid.append(video);
 }
 
 // This function scrolls the chat window to the bottom when overflowing
