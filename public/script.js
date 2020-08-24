@@ -13,7 +13,7 @@ var peer = new Peer(undefined, {
   // path to our server
   path: '/peerjs',
   host: '/',
-  port: '3000'
+  port: '443'
 }); 
 
 // get the video-grid html div element
